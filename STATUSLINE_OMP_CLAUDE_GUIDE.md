@@ -7,7 +7,9 @@ statusline **multi‑ligne dédiée à Claude Code**, construite avec le segment
 [`Tests/hul10.omp.json`](Tests/hul10.omp.json).
 
 Document compagnon de [OH_MY_POSH_SEGMENTS_REFERENCE.md](OH_MY_POSH_SEGMENTS_REFERENCE.md)
-(segment *Claude Code* §10). **Tout a été vérifié sur Oh My Posh v29.10.**
+(segment *Claude Code* §10). **Vérifié sur Oh My Posh v29.10 puis v29.14** ;
+les différences de version sont signalées (notamment `.Effort.Level`, ajouté en
+29.14). `oh-my-posh upgrade` met à jour l'installation globale.
 
 ---
 
@@ -80,8 +82,8 @@ propriétés *déjà calculées et formatées*. Pas besoin de `jq`/`awk`.
 | `.FormattedAPIDuration` | string | ✅ | `0m 45s` — temps en appels API |
 | `.Cost.TotalLinesAdded` / `.Cost.TotalLinesRemoved` | int | ✅ | lignes `+`/`−` |
 | `.Cost.TotalCostUSD` | float64 | ✅ | coût brut (calculs/seuils) |
-| `.FastMode` | bool | ❌ | *online‑only* — **échoue** |
-| `.Effort.Level` | string | ❌ | *online‑only* — échoue |
+| `.Effort.Level` | string | ✅ (≥29.14) | effort de raisonnement (`low`…`max`). Source JSON `effort.level`. Absent → guarder avec `{{ if .Effort.Level }}`. **Cassé en 29.10**, ajouté en 29.14 |
+| `.FastMode` | bool | ❌ | *online‑only* — **échoue** en 29.14 |
 | `.Thinking.Enabled` / `.OutputStyle.Name` | — | ❌ | *online‑only* |
 | `.FiveHourResetsIn` / `.SevenDayResetsIn` | Duration | ❌ | *online‑only* — **échoue** |
 | `.Version` / `.Agent.Name` / `.Worktree.*` | string | ❌ | *online‑only* |
@@ -152,23 +154,27 @@ squelette mais **chaque ligne devient une facette de la session Claude**.
 La nouvelle [`_ciaanh.claude.omp.json`](_ciaanh.claude.omp.json) :
 
 ```text
-┌ 󰯉 Opus 4.8 · branche git ≡                    $0.42 · 2m 5s · +120 -8
+┌ 󰯉 Opus 4.8 [high] · branche git ≡                  2m 5s · +120 -8
 ├ ▰▰▰▱▱ 78% ctx · 12.3k↓ 4.5k↑ /200k
 └ 5h ▰▰▱▱▱ 42% · 7d ▰▰▰▰▱ 88%
 ```
 
 | Ligne | Contenu | Segments |
 |-------|---------|----------|
-| `┌` + bloc droit | modèle · branche git ⋯ coût · durée · lignes ± | `claude`, `git`, `claude` |
+| `┌` + bloc droit | modèle + effort · branche git ⋯ durée · lignes ± | `claude`, `git`, `claude` |
 | `├` | jauge contexte + % (coloré par seuil) · tokens ↓/↑ / taille fenêtre | `claude` ×2 |
 | `└` | quotas 5h & 7j (chacun coloré par seuil) | `claude` ×2 |
 
-**Décisions de design imposées par la v29.10** (cf. §2, §3) :
+**Décisions de design** (cf. §2, §3) :
 
 - jauges via la **méthode** `.X.GaugeUsed` → rendu `▰▱` 5 cases, non configurable ;
 - `%` via `{{ .TokenUsagePercent }}` directement (jamais `printf`) ;
 - couleurs de seuil via `foreground_templates` + `(.X.String | float64)` ;
-- propriétés `.FastMode`, `.Effort`, `.FiveHourResetsIn` **retirées** (cassées).
+- **coût retiré** : sur abonnement Pro/Max le `$` est notionnel et redondant avec
+  les quotas 5h/7j (le vrai budget) — voir §6 ;
+- **effort** affiché via `{{ if .Effort.Level }} [{{ .Effort.Level }}]{{ end }}`
+  (⚠️ requiert oh‑my‑posh **≥ 29.14** ; cassé en 29.10) ;
+- propriétés `.FastMode`, `.FiveHourResetsIn` **retirées** (toujours cassées).
 
 > 💡 **Icônes** : `󰯉` (robot), connecteurs `┌ ├ └`, et les glyphes Nerd Font de
 > branche/crayon dans le segment `git`. Tout glyphe de

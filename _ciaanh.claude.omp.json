@@ -30,7 +30,7 @@
           "style": "plain",
           "background": "transparent",
           "foreground": "p:mint",
-          "template": " 󰯉 {{ .Model.DisplayName }}"
+          "template": " 󰯉 {{ .Model.DisplayName }}{{ if .Effort.Level }} <p:grey>[{{ .Effort.Level }}]</>{{ end }}"
         },
         {
           "type": "git",
@@ -87,7 +87,7 @@
           "style": "plain",
           "background": "transparent",
           "foreground": "p:violet",
-          "template": "<p:white> · </> {{ if ge .ContextWindow.TotalInputTokens 1000 }}{{ printf \"%.1fk\" (divf .ContextWindow.TotalInputTokens 1000.0) }}{{ else }}{{ .ContextWindow.TotalInputTokens }}{{ end }}↓ {{ if ge .ContextWindow.TotalOutputTokens 1000 }}{{ printf \"%.1fk\" (divf .ContextWindow.TotalOutputTokens 1000.0) }}{{ else }}{{ .ContextWindow.TotalOutputTokens }}{{ end }}↑{{ if gt .ContextWindow.ContextWindowSize 0 }}<p:grey> /{{ printf \"%.0fk\" (divf .ContextWindow.ContextWindowSize 1000.0) }}</>{{ end }}"
+          "template": "<p:white> · </> <p:grey>in</> {{ if ge .ContextWindow.TotalInputTokens 1000 }}{{ printf \"%.1fk\" (divf .ContextWindow.TotalInputTokens 1000.0) }}{{ else }}{{ .ContextWindow.TotalInputTokens }}{{ end }} <p:grey>out</> {{ if ge .ContextWindow.TotalOutputTokens 1000 }}{{ printf \"%.1fk\" (divf .ContextWindow.TotalOutputTokens 1000.0) }}{{ else }}{{ .ContextWindow.TotalOutputTokens }}{{ end }}{{ if gt .ContextWindow.ContextWindowSize 0 }}<p:grey> /{{ printf \"%.0fk\" (divf .ContextWindow.ContextWindowSize 1000.0) }}</>{{ end }}"
         }
       ]
     },
