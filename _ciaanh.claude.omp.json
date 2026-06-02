@@ -55,7 +55,7 @@
           "style": "plain",
           "background": "transparent",
           "foreground": "p:mint",
-          "template": "{{ if .FormattedCost }}<p:green>{{ .FormattedCost }}</> <p:white>·</> {{ end }} {{ .FormattedDuration }}{{ if gt .Cost.TotalLinesAdded 0 }} <p:white>·</> <p:green>+{{ .Cost.TotalLinesAdded }}</> <p:red>-{{ .Cost.TotalLinesRemoved }}</>{{ end }}"
+          "template": " {{ .FormattedDuration }}{{ if gt .Cost.TotalLinesAdded 0 }} <p:white>·</> <p:green>+{{ .Cost.TotalLinesAdded }}</> <p:red>-{{ .Cost.TotalLinesRemoved }}</>{{ end }}"
         }
       ]
     },

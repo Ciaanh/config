@@ -1,0 +1,2 @@
+echo $PROFILE
+C:\Users\NicolasFABRE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1

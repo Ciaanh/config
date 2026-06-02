@@ -1,0 +1,1 @@
+oh-my-posh init pwsh --config 'https://raw.githubusercontent.com/Ciaanh/oh-my-posh/refs/heads/main/agnosterplus.omp.json' | Invoke-Expression 
