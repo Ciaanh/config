@@ -28,7 +28,7 @@
           "options": {
             "folder_icon": "\uf115",
             "folder_separator_icon": " \ue0b1 ",
-            "home_icon": "\uf7db",
+            "home_icon": "\uf015",
             "style": "agnoster"
           },
           "style": "powerline",
