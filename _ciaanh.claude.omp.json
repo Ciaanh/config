@@ -76,7 +76,11 @@
           "style": "plain",
           "background": "transparent",
           "foreground": "p:green",
-          "template": "  {{ .TokenUsagePercent.GaugeUsed }} {{ .TokenUsagePercent }}%<p:grey> ctx</>",
+          "options": {
+            "gauge_marked_char": "█",
+            "gauge_unmarked_char": "░"
+          },
+          "template": "  {{ .TokenGaugeUsed }} {{ .TokenUsagePercent }}%<p:grey> ctx (</>{{ $pct := (.TokenUsagePercent.String | float64) }}{{ $usedK := divf (mulf $pct (divf .ContextWindow.ContextWindowSize 100.0)) 1000.0 }}{{ printf \"%.0fk\" $usedK }}<p:grey>/</>{{ printf \"%.0fk\" (divf .ContextWindow.ContextWindowSize 1000.0) }}<p:grey>)</>",
           "foreground_templates": [
             "{{ if ge (.TokenUsagePercent.String | float64) 80.0 }}p:red{{ end }}",
             "{{ if ge (.TokenUsagePercent.String | float64) 50.0 }}p:yellow{{ end }}"
@@ -108,7 +112,11 @@
           "style": "plain",
           "background": "transparent",
           "foreground": "p:green",
-          "template": " <p:grey>5h</> {{ .FiveHourUsage.GaugeUsed }} {{ .FiveHourUsage }}%",
+          "options": {
+            "gauge_marked_char": "█",
+            "gauge_unmarked_char": "░"
+          },
+          "template": " <p:grey>5h</> {{ .FiveHourGauge }} {{ .FiveHourUsage }}%{{ if gt .FiveHourResetsIn.Seconds 0.0 }} <p:grey>󰔟</> {{ $mins := floor (divf .FiveHourResetsIn.Seconds 60.0) }}{{ secondsRound (mulf $mins 60.0) }}{{ end }}",
           "foreground_templates": [
             "{{ if ge (.FiveHourUsage.String | float64) 80.0 }}p:red{{ end }}",
             "{{ if ge (.FiveHourUsage.String | float64) 50.0 }}p:yellow{{ end }}"
@@ -119,7 +127,11 @@
           "style": "plain",
           "background": "transparent",
           "foreground": "p:green",
-          "template": "<p:white> · </><p:grey>7d</> {{ .SevenDayUsage.GaugeUsed }} {{ .SevenDayUsage }}%",
+          "options": {
+            "gauge_marked_char": "█",
+            "gauge_unmarked_char": "░"
+          },
+          "template": "<p:white> · </><p:grey>7d</> {{ .SevenDayGauge }} {{ .SevenDayUsage }}%{{ if gt .SevenDayResetsIn.Seconds 0.0 }} <p:grey>󰔟</> {{ $mins := floor (divf .SevenDayResetsIn.Seconds 60.0) }}{{ secondsRound (mulf $mins 60.0) }}{{ end }}",
           "foreground_templates": [
             "{{ if ge (.SevenDayUsage.String | float64) 80.0 }}p:red{{ end }}",
             "{{ if ge (.SevenDayUsage.String | float64) 50.0 }}p:yellow{{ end }}"
