@@ -92,6 +92,17 @@
           "background": "transparent",
           "foreground": "p:violet",
           "template": "<p:white> · </> <p:grey>in</> {{ if ge .ContextWindow.TotalInputTokens 1000 }}{{ printf \"%.1fk\" (divf .ContextWindow.TotalInputTokens 1000.0) }}{{ else }}{{ .ContextWindow.TotalInputTokens }}{{ end }} <p:grey>out</> {{ if ge .ContextWindow.TotalOutputTokens 1000 }}{{ printf \"%.1fk\" (divf .ContextWindow.TotalOutputTokens 1000.0) }}{{ else }}{{ .ContextWindow.TotalOutputTokens }}{{ end }}{{ if gt .ContextWindow.ContextWindowSize 0 }}<p:grey> /{{ printf \"%.0fk\" (divf .ContextWindow.ContextWindowSize 1000.0) }}</>{{ end }}"
+        },
+        {
+          "type": "claude",
+          "style": "plain",
+          "background": "transparent",
+          "foreground": "p:green",
+          "template": "{{ if .Env.CLAUDE_CODE_AUTO_COMPACT_WINDOW }}{{ $ct := .Env.CLAUDE_CODE_AUTO_COMPACT_WINDOW | float64 }}{{ $used := .ContextWindow.TotalInputTokens }}{{ $eff := divf (mulf $used 100.0) $ct }}<p:white> · </><p:grey>compact</> {{ printf \"%.0f\" $eff }}%<p:grey> (</>{{ if ge $used 1000 }}{{ printf \"%.1fk\" (divf $used 1000.0) }}{{ else }}{{ $used }}{{ end }}<p:grey>/</>{{ printf \"%.0fk\" (divf $ct 1000.0) }}<p:grey>)</>{{ end }}",
+          "foreground_templates": [
+            "{{ if .Env.CLAUDE_CODE_AUTO_COMPACT_WINDOW }}{{ $ct := .Env.CLAUDE_CODE_AUTO_COMPACT_WINDOW | float64 }}{{ if ge (divf (mulf .ContextWindow.TotalInputTokens 100.0) $ct) 80.0 }}p:red{{ end }}{{ end }}",
+            "{{ if .Env.CLAUDE_CODE_AUTO_COMPACT_WINDOW }}{{ $ct := .Env.CLAUDE_CODE_AUTO_COMPACT_WINDOW | float64 }}{{ if ge (divf (mulf .ContextWindow.TotalInputTokens 100.0) $ct) 50.0 }}p:yellow{{ end }}{{ end }}"
+          ]
         }
       ]
     },
